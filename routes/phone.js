@@ -4,7 +4,7 @@ var db = require('../models/db');
 var tencentApi = require('../models/tencentApi');
 
 
-/* GET users listing. */
+
 router.get('/validator', function (req, res, next) {
 	var phone = req.query.phone;
 	var ip = req.query.ip;
@@ -47,7 +47,7 @@ router.get('/validator/realtime', function (req, res, next) {
 							// 插入高危库
 							var hrDate = {
 								phone: phone,
-								level: result.leve,
+								level: result.level,
 								timestamp: new Date()
 							};
 							db.update('HighRiskPhone',{
@@ -80,15 +80,6 @@ router.get('/validator/offline', function (req, res, next) {
 	}
 	res.send('ok');
 });
-
-
-
-function getClientIp(req) {
-	return req.headers['x-forwarded-for'] ||
-		req.connection.remoteAddress ||
-		req.socket.remoteAddress ||
-		req.connection.socket.remoteAddress;
-}
 
 
 module.exports = router;

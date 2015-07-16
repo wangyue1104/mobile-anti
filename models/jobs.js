@@ -15,27 +15,30 @@ for(var i =0 ; i< 60; i=i+5 ){
 rule.second = times;
 
 var job = schedule.scheduleJob(rule, function(){
-	/*
-	db.findOne('SuspiciousPhone',{},function(data){
-		if(!data || !data.phone){
-			return ;
+	db.findOne('SuspiciousPhone', {}, function (data) {
+		if (!data || !data.phone) {
+			return;
 		}
 		//TODO 远程验证
-		tecentApi('13073384296');
-
+		tecentApi(data.phone, data.ip, function (result) {
+			if (result.errorCode == 0 && result.level >= 7) {
+				// 插入高危库
+				var hrDate = {
+					phone: data.phone,
+					level: result.level,
+					timestamp: new Date()
+				};
+				db.update('HighRiskPhone', {
+					phone: hrDate.phone
+				}, hrDate);
+				// 样本库中删除
+				db.remove('SuspiciousPhone', {phone: hrDate.phone});
+			}
+		}, function (err) {
+			console.error(err);
+		});
 		console.log('schedule');
-
-		// 插入高危库
-		var hrDate = {
-			phone: data.phone,
-			timestamp: new Date()
-		};
-		db.update('HighRiskPhone',{
-			phone: hrDate.phone
-		},hrDate);
-
 	});
-	*/
 });
 
 module.exports = job;

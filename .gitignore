@@ -10,3 +10,4 @@ logs
 /tools/source
 config.js
 .DS_Store
+/node_modules
